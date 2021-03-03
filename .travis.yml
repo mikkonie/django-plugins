@@ -2,46 +2,18 @@ language: python
 dist: xenial
 
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 env:
-  - DJANGO_VERSION=">=1.6,<1.7"
-  - DJANGO_VERSION=">=1.7,<1.8"
-  - DJANGO_VERSION=">=1.8,<1.9"
-  - DJANGO_VERSION=">=1.9,<1.10"
   - DJANGO_VERSION=">=1.10,<1.11"
   - DJANGO_VERSION=">=1.11,<2.0"
   - DJANGO_VERSION=">=2.1,<2.2"
   - DJANGO_VERSION=">=2.2,<2.3"
-matrix:
-    exclude:
-        # Python 3.4 does not work with some django versions.
-        - python: "3.4"
-          env: DJANGO_VERSION=">=1.6,<1.7"
-        - python: "3.4"
-          env: DJANGO_VERSION=">=1.7,<1.8"
-        # Python 3.5 does not work with some django versions.
-        - python: "3.5"
-          env: DJANGO_VERSION=">=1.6,<1.7"
-        - python: "3.5"
-          env: DJANGO_VERSION=">=1.7,<1.8"
-        # Django 2.x only works under python3
-        - python: "2.7"
-          env: DJANGO_VERSION=">=2.1,<2.2"
-        - python: "2.7"
-          env: DJANGO_VERSION=">=2.2,<2.3"
-        # Django >= 2.1 only supports python >= 3.5
-        - python: "3.4"
-          env: DJANGO_VERSION=">=2.1,<2.2"
-        - python: "3.4"
-          env: DJANGO_VERSION=">=2.2,<2.3"
-        # Django =>1.6<=1.8 is not supported under python  >=3.6
-        - python: "3.6"
-          env: DJANGO_VERSION=">=1.6,<1.7"
-        - python: "3.6"
-          env: DJANGO_VERSION=">=1.7,<1.8"
+  - DJANGO_VERSION=">=3.0,<3.1"
+  - DJANGO_VERSION=">=3.1,<3.2"
+# matrix:
+#     exclude:
 
 install:
   - pip install "Django${DJANGO_VERSION}"
@@ -52,7 +24,4 @@ script:
   # Now make sure that migrations don't fail.
   - cd $TRAVIS_BUILD_DIR/example-project
   # manage.py migrate was not available on older django versions.
-  - if [ ${DJANGO_VERSION} == ">=1.6,<1.7" ];
-    then python manage.py syncdb --noinput; else
-    python manage.py migrate;
-    fi
+  - python manage.py migrate
